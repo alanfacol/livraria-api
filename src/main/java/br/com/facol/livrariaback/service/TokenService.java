@@ -23,4 +23,10 @@ public class TokenService {
                 .withExpiresAt(LocalDateTime.now().plusMinutes(10).toInstant(ZoneOffset.of("-03:00"))
                 ).sign(Algorithm.HMAC256("javainuse"));
     }
+
+    public String getSubject(String token) {
+        return JWT.require(Algorithm.HMAC256("javainuse"))
+                .withIssuer("Livros")
+                .build().verify(token).getSubject();
+    }
 }
