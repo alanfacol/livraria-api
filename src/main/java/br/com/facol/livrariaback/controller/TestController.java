@@ -12,9 +12,4 @@ public class TestController {
     public String test(){
         return "Teste sem autorização finalizado!";
     }
-
-    @GetMapping("/login")
-    public String testLogin(){
-        return "Teste com autorização realizado com sucesso!";
-    }
 }
