@@ -44,6 +44,7 @@ public class ClientService {
             Login login = newClient.getLogin();
             login.setUsername(client.getLogin().getUsername());
             login.setPassword(client.getLogin().getPassword());
+            login.setAdmin(client.getLogin().isAdmin());
 
             newClient.setLogin(login);
 

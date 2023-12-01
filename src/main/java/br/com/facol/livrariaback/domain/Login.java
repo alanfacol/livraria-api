@@ -32,6 +32,9 @@ public class Login implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "is_admin", nullable = false)
+    private boolean admin;
+
     @OneToOne
     @JsonIgnore
     @PrimaryKeyJoinColumn(name = "client_id", referencedColumnName = "id")
@@ -39,7 +42,9 @@ public class Login implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if (this.isAdmin()){
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

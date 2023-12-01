@@ -5,6 +5,8 @@ import br.com.facol.livrariaback.domain.Client;
 import br.com.facol.livrariaback.domain.Login;
 import br.com.facol.livrariaback.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,5 +35,11 @@ public class AuthController {
     @GetMapping("/test")
     public String testLogin(){
         return "Usuário autorizado!";
+    }
+
+    @GetMapping("/test/admin")
+    @Secured("ROLE_ADMIN")
+    public String testAdmin(){
+        return "Usuário admin autenticado!";
     }
 }
