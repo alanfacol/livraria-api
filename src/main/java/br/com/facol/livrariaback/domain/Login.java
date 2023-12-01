@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class Login implements UserDetails {
     private String password;
 
     @OneToOne
+    @JsonIgnore
     @PrimaryKeyJoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
