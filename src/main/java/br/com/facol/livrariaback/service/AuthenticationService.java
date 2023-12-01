@@ -1,6 +1,6 @@
 package br.com.facol.livrariaback.service;
 
-import br.com.facol.livrariaback.repository.ClientRepository;
+import br.com.facol.livrariaback.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService implements UserDetailsService {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private LoginRepository loginRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.clientRepository.findByUsername(username);
+        return this.loginRepository.findByUsername(username);
     }
 }

@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.service;
 
 import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.domain.Login;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -13,11 +14,11 @@ import java.time.ZoneOffset;
 public class TokenService {
 
 
-    public String gerarToken(Client usuario) {
+    public String gerarToken(Login usuario) {
 
         return JWT.create()
-                .withIssuer("Livos")
-                .withSubject(usuario.getName())
+                .withIssuer("Livros")
+                .withSubject(usuario.getUsername())
                 .withClaim("id", usuario.getId())
                 .withExpiresAt(LocalDateTime.now().plusMinutes(10).toInstant(ZoneOffset.of("-03:00"))
                 ).sign(Algorithm.HMAC256("javainuse"));

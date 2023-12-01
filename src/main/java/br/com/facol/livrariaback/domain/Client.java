@@ -23,7 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Client implements UserDetails {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,38 +41,10 @@ public class Client implements UserDetails {
     @Column(name = "birthdate", nullable = false)
     private Date birthdate;
 
-    @Column(name = "username", length = 20, nullable = false)
-    private String username;
-
-    @Column(name = "password", nullable = false)
-    private String password;
+    @OneToOne
+    private Login login;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "client_id")
     private List<Address> addressList;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

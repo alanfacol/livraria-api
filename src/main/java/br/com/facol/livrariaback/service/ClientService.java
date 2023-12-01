@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.service;
 
 import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.domain.Login;
 import br.com.facol.livrariaback.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -40,8 +41,12 @@ public class ClientService {
             newClient.setDocument(client.getDocument());
             newClient.setPj(client.isPj());
             newClient.setBirthdate(client.getBirthdate());
-            newClient.setUsername(client.getUsername());
-            newClient.setPassword(client.getPassword());
+
+            Login login = newClient.getLogin();
+            login.setUsername(client.getLogin().getUsername());
+            login.setPassword(client.getLogin().getPassword());
+
+            newClient.setLogin(login);
 
             return this.clientRepository.save(newClient);
         } else {
