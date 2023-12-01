@@ -2,6 +2,7 @@ package br.com.facol.livrariaback.controller;
 
 
 import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.domain.Login;
 import br.com.facol.livrariaback.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,12 +24,12 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Client client){
+    public String login(@RequestBody Login login){
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(client.getUsername(), client.getPassword());
+                new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
         Authentication authenticate = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        Client usuario = (Client) authenticate.getPrincipal();
+        Login usuario = (Login) authenticate.getPrincipal();
         return tokenService.gerarToken(usuario);
     }
 }
