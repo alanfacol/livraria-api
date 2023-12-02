@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.controller;
 
-import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.dto.ClientCreateDTO;
+import br.com.facol.livrariaback.dto.ClientDTO;
 import br.com.facol.livrariaback.service.AuthenticationService;
 import br.com.facol.livrariaback.service.ClientService;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -26,27 +26,26 @@ public class ClientController {
 
     @GetMapping()
     @Secured("ROLE_ADMIN")
-    public List<Client> getAll(){
+    public List<ClientDTO> getAll(){
         return this.clientService.getAll();
     }
 
     @GetMapping("/me")
-    public Client getMe(){
-        Long id = this.authenticationService.getMyId();
-        Optional<Client> client = this.clientService.findById(id);
-        return client.orElse(null);
+    @Secured("ROLE_USER")
+    public ClientDTO getMe(){
+        String username = this.authenticationService.getMyUsername();
+        return this.clientService.findByUsername(username);
     }
 
     @PostMapping
-    @Secured("ROLE_ADMIN")
-    public Client create(@RequestBody Client client){
+    public ClientCreateDTO create(@RequestBody ClientCreateDTO client){
         return this.clientService.create(client);
     }
 
-    @PutMapping
+    @PutMapping("/me")
     @Secured("ROLE_USER")
-    public Client update(@RequestBody Client client) {
-        Long id = this.authenticationService.getMyId();
-        return this.clientService.update(id, client);
+    public ClientDTO update(@RequestBody ClientDTO client) {
+        String username = this.authenticationService.getMyUsername();
+        return this.clientService.update(username, client);
     }
 }
