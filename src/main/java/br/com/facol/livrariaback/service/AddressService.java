@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @NoArgsConstructor
@@ -34,7 +36,34 @@ public class AddressService {
         return this.addressRepository.save(addr);
     }
 
-    public Address update(Address addr){
-        return this.addressRepository.save(addr);
+    public Address update(Long clientId, Long addrId , Address addr){
+
+        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(clientId);
+
+        for (Address add : clientAddresses) {
+            if(Objects.equals(addrId, add.getId())){
+                add.setId(addrId);
+                add.setPublicPlace(addr.getPublicPlace());
+                add.setNumber(addr.getNumber());
+                add.setComplement(addr.getComplement());
+                add.setDistrict(addr.getDistrict());
+                add.setCity(addr.getCity());
+                add.setZipCode(addr.getZipCode());
+                add.setState(addr.getState());
+
+                return this.addressRepository.save(add);
+            }
+        }
+        return null;
+    }
+
+    public void delete(Long clientId, Long addrId){
+        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(clientId);
+        for (Address add : clientAddresses) {
+            if (Objects.equals(addrId, add.getId())) {
+                this.addressRepository.deleteById(addrId);
+                break;
+            }
+        }
     }
 }

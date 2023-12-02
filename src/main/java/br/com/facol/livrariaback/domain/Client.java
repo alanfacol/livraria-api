@@ -2,6 +2,7 @@ package br.com.facol.livrariaback.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,7 +42,7 @@ public class Client {
     @Column(name = "birthdate", nullable = false)
     private Date birthdate;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Login login;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

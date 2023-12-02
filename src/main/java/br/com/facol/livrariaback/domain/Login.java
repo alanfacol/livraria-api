@@ -35,15 +35,14 @@ public class Login implements UserDetails {
     @Column(name = "is_admin", nullable = false)
     private boolean admin;
 
-    @OneToOne
-    @JsonIgnore
-    @PrimaryKeyJoinColumn(name = "client_id", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @PrimaryKeyJoinColumn(name = "login_id", referencedColumnName = "id")
     private Client client;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.isAdmin()){
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
         } else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

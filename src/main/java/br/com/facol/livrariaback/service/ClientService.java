@@ -3,6 +3,7 @@ package br.com.facol.livrariaback.service;
 import br.com.facol.livrariaback.domain.Client;
 import br.com.facol.livrariaback.domain.Login;
 import br.com.facol.livrariaback.repository.ClientRepository;
+import br.com.facol.livrariaback.utils.PassCrypt;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class ClientService {
 
     @Transactional
     public Client create(Client client){
+        Login user = client.getLogin();
+        user.setPassword(PassCrypt.encrypt(user.getPassword()));
+        client.setLogin(user);
+
         return this.clientRepository.save(client);
     }
 
@@ -40,13 +45,6 @@ public class ClientService {
             newClient.setDocument(client.getDocument());
             newClient.setPj(client.isPj());
             newClient.setBirthdate(client.getBirthdate());
-
-            Login login = newClient.getLogin();
-            login.setUsername(client.getLogin().getUsername());
-            login.setPassword(client.getLogin().getPassword());
-            login.setAdmin(client.getLogin().isAdmin());
-
-            newClient.setLogin(login);
 
             return this.clientRepository.save(newClient);
         } else {
