@@ -19,13 +19,12 @@ public class AuthenticationService implements UserDetailsService {
         return this.loginRepository.findByUsername(username);
     }
 
-    public Long getMyId(){
+    public String getMyUsername(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            return this.loginRepository.findClientIdByUsername(username);
+            return userDetails.getUsername();
         } else return null;
     }
 }

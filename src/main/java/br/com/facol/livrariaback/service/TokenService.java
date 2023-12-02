@@ -1,10 +1,8 @@
 package br.com.facol.livrariaback.service;
 
-import br.com.facol.livrariaback.domain.Client;
 import br.com.facol.livrariaback.domain.Login;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
