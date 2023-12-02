@@ -48,4 +48,9 @@ public class Client {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "client_id")
     private List<Address> addressList;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "client_id")
+    @JsonIgnore
+    private List<Sale> saleList;
 }

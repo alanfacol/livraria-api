@@ -44,4 +44,8 @@ public class Address {
     @JsonIgnore
     @ManyToOne
     private Client client;
+
+    @JsonIgnore
+    @ManyToOne
+    private Sale sale;
 }

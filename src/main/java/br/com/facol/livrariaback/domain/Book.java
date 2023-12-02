@@ -1,10 +1,13 @@
 package br.com.facol.livrariaback.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -32,5 +35,9 @@ public class Book {
 
     @Column(name = "stock", nullable = false)
     private Long stock;
+
+    @ManyToMany(mappedBy = "books")
+    @JsonIgnore
+    private List<Sale> saleList;
 
 }
