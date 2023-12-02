@@ -1,8 +1,6 @@
 package br.com.facol.livrariaback.service;
 
-import br.com.facol.livrariaback.domain.Address;
 import br.com.facol.livrariaback.domain.Book;
-import br.com.facol.livrariaback.domain.Client;
 import br.com.facol.livrariaback.repository.BookRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
