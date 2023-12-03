@@ -49,7 +49,7 @@ public class LoginService {
         Optional<Login> oldLogin = this.loginRepository.findUserByUsername(username);
 
         if (oldLogin.isPresent()){
-            Login newUser = new Login();
+            Login newUser = oldLogin.get();
             this.loginRepository.save(user.toLogin(newUser));
             return user;
         } else return null;
