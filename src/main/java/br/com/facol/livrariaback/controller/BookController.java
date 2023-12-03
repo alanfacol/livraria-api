@@ -1,4 +1,4 @@
-package br.com.facol.livrariaback.controller.admin;
+package br.com.facol.livrariaback.controller;
 
 import br.com.facol.livrariaback.domain.Book;
 import br.com.facol.livrariaback.dto.BookDTO;
@@ -21,7 +21,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    @Secured("ROLE_USER")
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public List<BookDTO> getAll(){
        return this.bookService.getAll();
     }
