@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.controller;
 
 import br.com.facol.livrariaback.domain.Book;
+import br.com.facol.livrariaback.dto.BookDTO;
 import br.com.facol.livrariaback.service.BookService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -20,26 +21,26 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    @Secured("ROLE_ADMIN")
-    public List<Book> getAll(@RequestParam(name = "id", required = false) Long id ){
+    @Secured("ROLE_USER")
+    public List<BookDTO> getAll(){
        return this.bookService.getAll();
     }
 
     @PostMapping
     @Secured("ROLE_ADMIN")
-    public Book create(@RequestBody Book book){
+    public BookDTO create(@RequestBody BookDTO book){
         return this.bookService.create(book);
     }
 
     @PutMapping
     @Secured("ROLE_ADMIN")
-    public Book create(@RequestParam(name = "id") Long id, @RequestBody Book book){
-        return this.bookService.update(id, book);
+    public BookDTO update(@RequestBody BookDTO book){
+        return this.bookService.update(book);
     }
 
     @DeleteMapping
     @Secured("ROLE_ADMIN")
-    public void delete(@RequestParam(name = "id") Long id){
-        this.bookService.delete(id);
+    public void delete(@RequestParam(name = "code") String code){
+        this.bookService.delete(code);
     }
 }
