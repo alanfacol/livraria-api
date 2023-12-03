@@ -18,7 +18,7 @@ public class TokenService {
                 .withIssuer("Livros")
                 .withSubject(usuario.getUsername())
                 .withClaim("id", usuario.getId())
-                .withExpiresAt(LocalDateTime.now().plusMinutes(10).toInstant(ZoneOffset.of("-03:00"))
+                .withExpiresAt(LocalDateTime.now().plusMinutes(60).toInstant(ZoneOffset.of("-03:00"))
                 ).sign(Algorithm.HMAC256("javainuse"));
     }
 
