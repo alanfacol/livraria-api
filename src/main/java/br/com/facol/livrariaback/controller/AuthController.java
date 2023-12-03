@@ -33,10 +33,4 @@ public class AuthController {
     public String testLogin(){
         return "Usuário autorizado!";
     }
-
-    @GetMapping("/test/admin")
-    @Secured("ROLE_ADMIN")
-    public String testAdmin(){
-        return "Usuário admin autenticado!";
-    }
 }

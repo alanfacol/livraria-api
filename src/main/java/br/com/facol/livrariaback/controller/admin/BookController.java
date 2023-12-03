@@ -1,4 +1,4 @@
-package br.com.facol.livrariaback.controller;
+package br.com.facol.livrariaback.controller.admin;
 
 import br.com.facol.livrariaback.domain.Book;
 import br.com.facol.livrariaback.dto.BookDTO;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookController {
@@ -26,21 +26,4 @@ public class BookController {
        return this.bookService.getAll();
     }
 
-    @PostMapping
-    @Secured("ROLE_ADMIN")
-    public BookDTO create(@RequestBody BookDTO book){
-        return this.bookService.create(book);
-    }
-
-    @PutMapping
-    @Secured("ROLE_ADMIN")
-    public BookDTO update(@RequestBody BookDTO book){
-        return this.bookService.update(book);
-    }
-
-    @DeleteMapping
-    @Secured("ROLE_ADMIN")
-    public void delete(@RequestParam(name = "code") String code){
-        this.bookService.delete(code);
-    }
 }

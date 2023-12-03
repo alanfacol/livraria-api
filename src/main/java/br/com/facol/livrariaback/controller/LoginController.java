@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/me/user")
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginController {

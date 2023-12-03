@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("me/address")
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressController {
@@ -29,15 +29,7 @@ public class AddressController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @GetMapping
-    @Secured("ROLE_ADMIN")
-    public List<AddressDTO> getAll(@RequestParam("username") String username, @RequestParam(name = "addr", required = false) Long addr) {
-        if (addr == null){
-            return this.addressService.getAddressesByClient(username);
-        } else return this.addressService.getAddressByClient(username, addr);
-    }
-
-    @GetMapping("/me")
+    @GetMapping()
     public List<AddressDTO> getAll(@RequestParam(name = "addr", required = false) Long addr){
         String username = this.authenticationService.getMyUsername();
         if (addr == null){
@@ -45,21 +37,21 @@ public class AddressController {
         } else return this.addressService.getAddressByClient(username, addr);
     }
 
-    @PostMapping("/me")
+    @PostMapping()
     @Secured("ROLE_USER")
     public AddressDTO create(@RequestBody AddressDTO addr){
         String username = this.authenticationService.getMyUsername();
         return this.addressService.create(username, addr);
     }
 
-    @PutMapping("/me")
+    @PutMapping()
     @Secured("ROLE_USER")
     public AddressDTO update(@RequestParam(name = "id") Long addrId, @RequestBody AddressDTO address){
         String username = this.authenticationService.getMyUsername();
         return this.addressService.update(username, addrId, address);
     }
 
-    @DeleteMapping("/me")
+    @DeleteMapping()
     @Secured("ROLE_USER")
     public void delete(@RequestParam(name = "id") Long addrId){
         String username = this.authenticationService.getMyUsername();

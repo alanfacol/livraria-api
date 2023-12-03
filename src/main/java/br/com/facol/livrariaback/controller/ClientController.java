@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/clients")
+@RequestMapping("/me")
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientController {
@@ -25,12 +25,6 @@ public class ClientController {
     private AuthenticationService authenticationService;
 
     @GetMapping()
-    @Secured("ROLE_ADMIN")
-    public List<ClientDTO> getAll(){
-        return this.clientService.getAll();
-    }
-
-    @GetMapping("/me")
     @Secured("ROLE_USER")
     public ClientDTO getMe(){
         String username = this.authenticationService.getMyUsername();
@@ -42,7 +36,7 @@ public class ClientController {
         return this.clientService.create(client);
     }
 
-    @PutMapping("/me")
+    @PutMapping()
     @Secured("ROLE_USER")
     public ClientDTO update(@RequestBody ClientDTO client) {
         String username = this.authenticationService.getMyUsername();
