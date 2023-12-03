@@ -3,6 +3,8 @@ package br.com.facol.livrariaback.controller;
 
 import br.com.facol.livrariaback.domain.Address;
 import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.dto.AddressDTO;
+import br.com.facol.livrariaback.dto.ClientDTO;
 import br.com.facol.livrariaback.service.AddressService;
 import br.com.facol.livrariaback.service.AuthenticationService;
 import br.com.facol.livrariaback.service.ClientService;
@@ -25,46 +27,42 @@ public class AddressController {
     @Autowired
     private AddressService addressService;
     @Autowired
-    private ClientService clientService;
-    @Autowired
     private AuthenticationService authenticationService;
 
     @GetMapping
     @Secured("ROLE_ADMIN")
-    public List<Address> getAll(@RequestParam("client") Long id, @RequestParam(name = "addr", required = false) Long addr){
+    public List<Address> getAll(@RequestParam("username") String username, @RequestParam(name = "addr", required = false) Long addr) {
         if (addr == null){
-            return this.addressService.getAddressesByClient(id);
-        } else return this.addressService.getAddressByClient(id, addr);
+            return this.addressService.getAddressesByClient(username);
+        } else return this.addressService.getAddressByClient(username, addr);
     }
 
     @GetMapping("/me")
-    public List<Address> getAll(@RequestParam(name = "id", required = false) Long addr){
-        Long id = this.authenticationService.getMyId();
+    public List<Address> getAll(@RequestParam(name = "addr", required = false) Long addr){
+        String username = this.authenticationService.getMyUsername();
         if (addr == null){
-            return this.addressService.getAddressesByClient(id);
-        } else return this.addressService.getAddressByClient(id, addr);
+            return this.addressService.getAddressesByClient(username);
+        } else return this.addressService.getAddressByClient(username, addr);
     }
 
-    @PostMapping
+    @PostMapping("/me")
     @Secured("ROLE_USER")
-    public Address create(@RequestBody Address addr){
-        Long id = this.authenticationService.getMyId();
-        Optional<Client> client = this.clientService.findById(id);
-        client.ifPresent(addr::setClient);
-        return this.addressService.create(addr);
+    public AddressDTO create(@RequestBody AddressDTO addr){
+        String username = this.authenticationService.getMyUsername();
+        return this.addressService.create(username, addr);
     }
 
-    @PutMapping
+    @PutMapping("/me")
     @Secured("ROLE_USER")
-    public Address update(@RequestParam(name = "id") Long addrId, @RequestBody Address address){
-        Long id = this.authenticationService.getMyId();
-        return this.addressService.update(id, addrId, address);
+    public AddressDTO update(@RequestParam(name = "id") Long addrId, @RequestBody AddressDTO address){
+        String username = this.authenticationService.getMyUsername();
+        return this.addressService.update(username, addrId, address);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/me")
     @Secured("ROLE_USER")
     public void delete(@RequestParam(name = "id") Long addrId){
-        Long id = this.authenticationService.getMyId();
-        this.addressService.delete(id, addrId);
+        String username = this.authenticationService.getMyUsername();
+        this.addressService.delete(username, addrId);
     }
 }

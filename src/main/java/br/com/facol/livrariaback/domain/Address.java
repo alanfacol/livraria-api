@@ -1,12 +1,13 @@
 package br.com.facol.livrariaback.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "address")
@@ -45,7 +46,8 @@ public class Address {
     @ManyToOne
     private Client client;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id")
     @JsonIgnore
-    @ManyToOne
-    private Sale sale;
+    private List<Sale> sale;
 }

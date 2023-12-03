@@ -10,9 +10,15 @@ import java.util.List;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-    @Query(value = "SELECT a.* FROM address a WHERE a.client_id = ?1", nativeQuery = true)
-    List<Address> getAddressesByClient(Long id);
+    @Query(value = "SELECT a.* FROM address a " +
+            "JOIN client c ON a.client_id = c.id " +
+            "JOIN login l on c.login_id = l.id " +
+            " WHERE l.username = ?1", nativeQuery = true)
+    List<Address> getAddressesByClient(String username);
 
-    @Query(value = "SELECT a.* FROM address a WHERE a.id = ?1", nativeQuery = true)
-    List<Address> getAddressByClient(Long client, Long addr);
+    @Query(value = "SELECT a.* FROM address a " +
+            "JOIN client c ON a.client_id = c.id " +
+            "JOIN login l on c.login_id = l.id " +
+            "WHERE l.username = ?1 AND a.id = ?2", nativeQuery = true)
+    List<Address> getAddressByClient(String username, Long addr);
 }

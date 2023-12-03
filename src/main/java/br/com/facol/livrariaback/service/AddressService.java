@@ -1,8 +1,10 @@
 package br.com.facol.livrariaback.service;
 
 import br.com.facol.livrariaback.domain.Address;
+import br.com.facol.livrariaback.domain.Client;
+import br.com.facol.livrariaback.dto.AddressDTO;
 import br.com.facol.livrariaback.repository.AddressRepository;
-import jakarta.transaction.Transactional;
+import br.com.facol.livrariaback.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,44 +22,43 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
-    public List<Address> getAll(){
-        return this.addressRepository.findAll();
+    @Autowired
+    private ClientRepository clientRepository;
+
+    public List<Address> getAddressesByClient(String username){
+        return this.addressRepository.getAddressesByClient(username);
     }
 
-    public List<Address> getAddressesByClient(Long id){
-        return this.addressRepository.getAddressesByClient(id);
+    public List<Address> getAddressByClient(String username, Long addr){
+        return this.addressRepository.getAddressByClient(username, addr);
     }
 
-    public List<Address> getAddressByClient(Long client, Long addr){
-        return this.addressRepository.getAddressByClient(client, addr);
+    public AddressDTO create(String username, AddressDTO addr){
+        Optional<Client> OptClient = this.clientRepository.findByUsername(username);
+
+        if (OptClient.isPresent()){
+            Address newAddress = new Address();
+            Client client = OptClient.get();
+            newAddress.setClient(client);
+            this.addressRepository.save(addr.toAddress(newAddress));
+            return addr;
+        } else return null;
     }
 
-    public Address create(Address addr){
-        return this.addressRepository.save(addr);
-    }
+    public AddressDTO update(String username, Long addrId , AddressDTO addr){
 
-    public Address update(Long clientId, Long addrId , Address addr){
-
-        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(clientId);
+        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(username);
 
         for (Address add : clientAddresses) {
-            if(Objects.equals(addrId, add.getId())){
-                add.setId(addrId);
-                add.setPublicPlace(addr.getPublicPlace());
-                add.setNumber(addr.getNumber());
-                add.setComplement(addr.getComplement());
-                add.setDistrict(addr.getDistrict());
-                add.setCity(addr.getCity());
-                add.setZipCode(addr.getZipCode());
-                add.setState(addr.getState());
-
-                return this.addressRepository.save(add);
+            if(Objects.equals(addrId, add.getId())){;
+                this.addressRepository.save(addr.toAddress(add));
+                return addr;
             }
         }
         return null;
     }
 
-    public void delete(Long clientId, Long addrId){
+    public void delete(String clientId, Long addrId){
         List<Address> clientAddresses = this.addressRepository.getAddressesByClient(clientId);
         for (Address add : clientAddresses) {
             if (Objects.equals(addrId, add.getId())) {
