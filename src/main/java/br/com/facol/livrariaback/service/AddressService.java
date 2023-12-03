@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,12 +26,28 @@ public class AddressService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public List<Address> getAddressesByClient(String username){
-        return this.addressRepository.getAddressesByClient(username);
+    public List<AddressDTO> getAddressesByClient(String username){
+        List<Address> addresses = this.addressRepository.getAddressesByClient(username);
+        List<AddressDTO> addressDTOS = new ArrayList<>();
+
+        for (Address address: addresses) {
+            AddressDTO addressDTO = new AddressDTO();
+            addressDTOS.add(addressDTO.toAddressDto(address));
+        }
+
+        return addressDTOS;
     }
 
-    public List<Address> getAddressByClient(String username, Long addr){
-        return this.addressRepository.getAddressByClient(username, addr);
+    public List<AddressDTO> getAddressByClient(String username, Long addr){
+        List<Address> addresses = this.addressRepository.getAddressByClient(username, addr);
+        List<AddressDTO> addressDTOS = new ArrayList<>();
+
+        for (Address address: addresses) {
+            AddressDTO addressDTO = new AddressDTO();
+            addressDTOS.add(addressDTO.toAddressDto(address));
+        }
+
+        return addressDTOS;
     }
 
     public AddressDTO create(String username, AddressDTO addr){
@@ -58,8 +75,8 @@ public class AddressService {
         return null;
     }
 
-    public void delete(String clientId, Long addrId){
-        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(clientId);
+    public void delete(String username, Long addrId){
+        List<Address> clientAddresses = this.addressRepository.getAddressesByClient(username);
         for (Address add : clientAddresses) {
             if (Objects.equals(addrId, add.getId())) {
                 this.addressRepository.deleteById(addrId);

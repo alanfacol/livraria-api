@@ -25,7 +25,7 @@ public class AddressDTO {
     private String city;
     private String state;
 
-    public AddressDTO toAddressDTO(Address address){
+    public AddressDTO toAddressDto(Address address){
         this.setPublicPlace(address.getPublicPlace());
         this.setNumber(address.getNumber());
         this.setComplement(address.getComplement());

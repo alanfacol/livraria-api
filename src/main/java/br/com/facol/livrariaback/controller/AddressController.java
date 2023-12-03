@@ -31,14 +31,14 @@ public class AddressController {
 
     @GetMapping
     @Secured("ROLE_ADMIN")
-    public List<Address> getAll(@RequestParam("username") String username, @RequestParam(name = "addr", required = false) Long addr) {
+    public List<AddressDTO> getAll(@RequestParam("username") String username, @RequestParam(name = "addr", required = false) Long addr) {
         if (addr == null){
             return this.addressService.getAddressesByClient(username);
         } else return this.addressService.getAddressByClient(username, addr);
     }
 
     @GetMapping("/me")
-    public List<Address> getAll(@RequestParam(name = "addr", required = false) Long addr){
+    public List<AddressDTO> getAll(@RequestParam(name = "addr", required = false) Long addr){
         String username = this.authenticationService.getMyUsername();
         if (addr == null){
             return this.addressService.getAddressesByClient(username);
