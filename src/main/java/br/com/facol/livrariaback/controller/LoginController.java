@@ -1,6 +1,8 @@
 package br.com.facol.livrariaback.controller;
 
 import br.com.facol.livrariaback.domain.Login;
+import br.com.facol.livrariaback.dto.LoginDTO;
+import br.com.facol.livrariaback.service.AuthenticationService;
 import br.com.facol.livrariaback.service.LoginService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -18,30 +20,13 @@ public class LoginController {
 
     @Autowired
     private LoginService loginService;
-
-    @GetMapping
-    @Secured("ROLE_ADMIN")
-    public List<Login> getAll(){
-        return this.loginService.getAll();
-    }
-
-    @PostMapping
-    @Secured("ROLE_ADMIN")
-    public Login create(@RequestBody Login user){
-        return this.loginService.create(user);
-    }
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PutMapping
-    @Secured("ROLE_ADMIN")
-    public Login update(@RequestParam(name = "id") Long id, @RequestBody Login user){
-        return this.loginService.update(id, user);
+    @Secured("ROLE_USER")
+    public LoginDTO update(@RequestBody LoginDTO user){
+        String username = this.authenticationService.getMyUsername();
+        return this.loginService.update(username, user);
     }
-
-    @DeleteMapping
-    @Secured("ROLE_ADMIN")
-    public void delete(@RequestParam(name = "id") Long id){
-        this.loginService.delete(id);
-    }
-
-
 }

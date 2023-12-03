@@ -1,6 +1,7 @@
 package br.com.facol.livrariaback.service;
 
 import br.com.facol.livrariaback.domain.Login;
+import br.com.facol.livrariaback.dto.LoginDTO;
 import br.com.facol.livrariaback.repository.LoginRepository;
 import br.com.facol.livrariaback.utils.PassCrypt;
 import jakarta.transaction.Transactional;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,38 +22,41 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
-    public List<Login> getAll(){
-        return this.loginRepository.findAll();
+    public List<LoginDTO> getAll(){
+        List<Login> logins = this.loginRepository.findAll();
+        List<LoginDTO> loginDTOS = new ArrayList<>();
+
+        for (Login login: logins) {
+            loginDTOS.add(new LoginDTO().toLoginDTO(login));
+        }
+
+        return loginDTOS;
     }
 
-    @Transactional
-    public Optional<Login> findById(Long id){
-        return this.loginRepository.findById(id);
+    public LoginDTO create(String username, LoginDTO user){
+        Optional<Login> optLogin = this.loginRepository.findUserByUsername(username);
+
+        if(optLogin.isEmpty()) {
+            Login newUser = new Login();
+            newUser.setAdmin(true);
+            this.loginRepository.save(user.toLogin(newUser));
+        }
+
+        return user;
     }
 
-    public Login create(Login user){
-        return this.loginRepository.save(user);
-    }
-
-    public Login update(Long id, Login newLogin){
-        Optional<Login> oldLogin = this.findById(id);
+    public LoginDTO update(String username, LoginDTO user){
+        Optional<Login> oldLogin = this.loginRepository.findUserByUsername(username);
 
         if (oldLogin.isPresent()){
-            Login login = oldLogin.get();
-
-            login.setId(id);
-            login.setUsername(newLogin.getUsername());
-            login.setPassword(PassCrypt.encrypt(newLogin.getPassword()));
-            login.setAdmin(newLogin.isAdmin());
-
-            return this.loginRepository.save(login);
+            Login newUser = new Login();
+            this.loginRepository.save(user.toLogin(newUser));
+            return user;
         } else return null;
     }
 
-    public void delete(Long id){
-        try{
-            this.loginRepository.deleteById(id);
-        } catch (Exception ignored){
-        }
+    public void delete(String username){
+        Optional<Login> user = this.loginRepository.findUserByUsername(username);
+        user.ifPresent(login -> this.loginRepository.deleteById(login.getId()));
     }
 }
