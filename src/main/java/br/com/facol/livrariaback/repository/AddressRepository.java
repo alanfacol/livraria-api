@@ -20,5 +20,5 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
             "JOIN client c ON a.client_id = c.id " +
             "JOIN login l on c.login_id = l.id " +
             "WHERE l.username = ?1 AND a.id = ?2", nativeQuery = true)
-    List<Address> getAddressByClient(String username, Long addr);
+    Address getAddressByClient(String username, Long addr);
 }

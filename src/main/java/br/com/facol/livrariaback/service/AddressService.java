@@ -39,13 +39,11 @@ public class AddressService {
     }
 
     public List<AddressDTO> getAddressByClient(String username, Long addr){
-        List<Address> addresses = this.addressRepository.getAddressByClient(username, addr);
+        Address address = this.addressRepository.getAddressByClient(username, addr);
         List<AddressDTO> addressDTOS = new ArrayList<>();
 
-        for (Address address: addresses) {
-            AddressDTO addressDTO = new AddressDTO();
-            addressDTOS.add(addressDTO.toAddressDto(address));
-        }
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTOS.add(addressDTO.toAddressDto(address));
 
         return addressDTOS;
     }
