@@ -31,9 +31,8 @@ public class Sale {
     @ManyToOne
     private Address address;
 
-    @ManyToMany
-    @JoinTable(name = "sale_book",
-            joinColumns = @JoinColumn(name = "sale_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private List<Book> books;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "sale_id")
+    @JsonIgnore
+    private List<Pack> packs;
 }

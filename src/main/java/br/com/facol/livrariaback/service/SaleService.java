@@ -1,24 +1,21 @@
 package br.com.facol.livrariaback.service;
 
-import br.com.facol.livrariaback.domain.Address;
-import br.com.facol.livrariaback.domain.Book;
-import br.com.facol.livrariaback.domain.Client;
-import br.com.facol.livrariaback.domain.Sale;
-import br.com.facol.livrariaback.dto.ClientDTO;
-import br.com.facol.livrariaback.dto.SaleCreateDTO;
-import br.com.facol.livrariaback.dto.SaleDTO;
+import br.com.facol.livrariaback.domain.*;
+import br.com.facol.livrariaback.dto.*;
 import br.com.facol.livrariaback.repository.AddressRepository;
 import br.com.facol.livrariaback.repository.BookRepository;
 import br.com.facol.livrariaback.repository.ClientRepository;
 import br.com.facol.livrariaback.repository.SaleRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +40,19 @@ public class SaleService {
 
         for (Sale sale : sales) {
             SaleDTO saleDTO = new SaleDTO();
-            saleDTOS.add(saleDTO.toSaleDTO(sale));
+            List<Pack> packs = sale.getPacks();
+            List<PackDTO> packDTOS = new ArrayList<>();
+
+            saleDTO.setAddress(sale.getAddress());
+
+            for (Pack pack : packs) {
+                PackDTO packDTO = new PackDTO();
+                packDTO.setBook(pack.getBook());
+                packDTO.setAmount(pack.getAmount());
+                packDTOS.add(packDTO);
+            }
+
+            saleDTOS.add(saleDTO.toSaleDTO(sale, packDTOS));
         }
 
         return saleDTOS;
@@ -53,16 +62,22 @@ public class SaleService {
     public SaleCreateDTO create(String username, SaleCreateDTO saleCreateDTO) {
         Optional<Client> client = this.clientRepository.findByUsername(username);
         Address address = this.addressRepository.getAddressByClient(username, saleCreateDTO.getAddressId());
-        List<Book> books = new ArrayList<>();
 
         if(client.isPresent()){
-            for ( String code: saleCreateDTO.getBooksCode()) {
-                Optional<Book> book = this.bookRepository.findByCode(code);
-                if (book.isPresent()){
-                    books.add(book.get());
-                } else return null;
+            List<Pack> packs = new ArrayList<>();
+            for ( PackCreateDTO code: saleCreateDTO.getPacks()) {
+                Optional<Book> book = this.bookRepository.findByCode(code.getBook());
+
+                if(book.isPresent()){
+                    Pack pack = new Pack();
+                    pack.setBook(book.get());
+                    pack.setAmount(code.getAmount());
+                    packs.add(pack);
+                }
             }
-            this.saleRepository.save(saleCreateDTO.toSale(client.get(), address, books));
+
+            this.saleRepository.save(saleCreateDTO.toSale(client.get(), address, packs));
+
         } else return null;
 
         return saleCreateDTO;

@@ -1,10 +1,7 @@
 package br.com.facol.livrariaback.dto;
 
 
-import br.com.facol.livrariaback.domain.Address;
-import br.com.facol.livrariaback.domain.Book;
-import br.com.facol.livrariaback.domain.Client;
-import br.com.facol.livrariaback.domain.Sale;
+import br.com.facol.livrariaback.domain.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class SaleCreateDTO {
     private Long addressId;
-    private List<String> booksCode;
+    private List<PackCreateDTO> packs;
 
-    public Sale toSale(Client client, Address address, List<Book> books) {
+    public Sale toSale(Client client, Address address, List<Pack> packs) {
         Sale sale = new Sale();
         sale.setDate(new Date());
         sale.setClient(client);
         sale.setAddress(address);
-        sale.setBooks(books);
+        sale.setPacks(packs);
 
         return sale;
     }
 }
+

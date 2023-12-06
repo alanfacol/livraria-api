@@ -2,7 +2,7 @@ package br.com.facol.livrariaback.dto;
 
 
 import br.com.facol.livrariaback.domain.Address;
-import br.com.facol.livrariaback.domain.Book;
+import br.com.facol.livrariaback.domain.Pack;
 import br.com.facol.livrariaback.domain.Sale;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,22 +16,17 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class SaleDTO {
     private Date date;
     private Address address;
-    private List<Book> books;
+    private List<PackDTO> packs;
 
-    public SaleDTO toSaleDTO(Sale sale){
+    public SaleDTO toSaleDTO(Sale sale, List<PackDTO> packs) {
         this.setDate(sale.getDate());
         this.setAddress(sale.getAddress());
-        this.setBooks(sale.getBooks());
+        this.setPacks(packs);
 
         return this;
-    }
-    public Sale toSale(Sale sale){
-        sale.setDate(this.getDate());
-        sale.setAddress(this.getAddress());
-        sale.setBooks(this.getBooks());
-        return sale;
     }
 }

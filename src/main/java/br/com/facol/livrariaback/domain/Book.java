@@ -36,8 +36,9 @@ public class Book {
     @Column(name = "stock", nullable = false)
     private Long stock;
 
-    @ManyToMany(mappedBy = "books")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "book_id")
     @JsonIgnore
-    private List<Sale> saleList;
+    private List<Pack> pack;
 
 }
