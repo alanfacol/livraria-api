@@ -17,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressDTO {
 
+    private Long id;
     private String publicPlace;
     private String number;
     private String complement;
@@ -26,6 +27,7 @@ public class AddressDTO {
     private String state;
 
     public AddressDTO toAddressDto(Address address){
+        this.setId(address.getId());
         this.setPublicPlace(address.getPublicPlace());
         this.setNumber(address.getNumber());
         this.setComplement(address.getComplement());
@@ -38,6 +40,7 @@ public class AddressDTO {
     }
 
     public Address toAddress(Address address){
+        address.setId(this.getId());
         address.setPublicPlace(this.getPublicPlace());
         address.setNumber(this.getNumber());
         address.setComplement(this.getComplement());
