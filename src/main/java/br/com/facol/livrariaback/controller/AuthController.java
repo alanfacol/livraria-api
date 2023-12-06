@@ -9,6 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -20,13 +23,16 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public String login(@RequestBody Login login){
+    public Map<String, String> login(@RequestBody Login login){
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
         Authentication authenticate = this.authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
         Login usuario = (Login) authenticate.getPrincipal();
-        return tokenService.gerarToken(usuario);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("token", tokenService.gerarToken(usuario));
+        return response;
     }
 
     @GetMapping("/test")
